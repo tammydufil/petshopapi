@@ -3,6 +3,7 @@ const {
   getAllOrders,
   getOrdersByUser,
   markAsDelivered,
+  getUserOrderStats,
 } = require("../controllers/orderscontroller");
 const {
   addCategory,
@@ -102,5 +103,7 @@ router.post("/createOrder", createOrder);
 router.get("/getOrders", getAllOrders);
 router.get("/orders/user/:userid", getOrdersByUser);
 router.put("/orders/:id/delivered", markAsDelivered);
+router.put("/orders/:id/delivered", markAsDelivered);
+router.get("/user/:userid/stats", getUserOrderStats);
 
 module.exports = router;

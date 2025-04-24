@@ -235,9 +235,46 @@ const markAsDelivered = async (req, res) => {
   }
 };
 
+const getUserOrderStats = async (req, res) => {
+  const { userid } = req.params;
+  try {
+    const [totalOrdersResult] = await sequelize.query(
+      `
+      SELECT COUNT(*) AS total_orders
+      FROM orders
+      WHERE userid = ?
+    `,
+      { replacements: [userid] }
+    );
+
+    const [pendingDeliveriesResult] = await sequelize.query(
+      `
+      SELECT COUNT(*) AS pending_deliveries
+      FROM orders
+      WHERE userid = ? AND deliverystatus = 'Pending'
+    `,
+      { replacements: [userid] }
+    );
+
+    const totalOrders = totalOrdersResult[0].total_orders;
+    const pendingDeliveries = pendingDeliveriesResult[0].pending_deliveries;
+
+    res.status(200).json({
+      totalOrders,
+      pendingDeliveries,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Failed to get user order statistics", error });
+  }
+};
+
 module.exports = {
   createOrder,
   getAllOrders,
   getOrdersByUser,
   markAsDelivered,
+  getUserOrderStats,
 };
