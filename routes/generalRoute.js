@@ -77,22 +77,21 @@ router.post("/create-checkout-session", async (req, res) => {
   const { cart, customerDetails } = req.body;
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card", "pay_by_bank", "paypal", "amazon_pay"], // Keep card for general payments
-
+    payment_method_types: ["card"],
     mode: "payment",
     line_items: cart.map((item) => ({
       price_data: {
-        currency: "ngn",
+        currency: "usd",
         product_data: {
           name: item.name,
         },
-        unit_amount: item.price * 100,
+        unit_amount: Math.round(item.price * 100),
       },
       quantity: item.quantity,
     })),
     customer_email: customerDetails.email,
-    success_url: "http://localhost:5173/postcheckout",
-    cancel_url: "http://localhost:5173/checkout",
+    success_url: "https://luvthypet.netlify.app/postcheckout",
+    cancel_url: "https://luvthypet.netlify.app/checkout",
   });
 
   res.json({ url: session.url });

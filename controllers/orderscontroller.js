@@ -64,7 +64,7 @@ const createOrder = async (req, res) => {
             <tr>
               <td>${item.name}</td>
               <td>${item.quantity}</td>
-              <td>₦ ${Number(item.price).toLocaleString()}</td>
+              <td>$ ${Number(item.price).toLocaleString()}</td>
             </tr>`
             )
             .join("")}
@@ -82,7 +82,7 @@ const createOrder = async (req, res) => {
         <tr><th>Payment Mode</th><td>${payment_mode}</td></tr>
         <tr><th>Payment Status</th><td>${paymentstatus}</td></tr>
         <tr><th>Delivery Status</th><td>${deliverystatus}</td></tr>
-        <tr><th>Amount Paid</th><td>₦ ${Number(
+        <tr><th>Amount Paid</th><td>$ ${Number(
           amount_paid
         ).toLocaleString()}</td></tr>
       </table>
@@ -237,6 +237,8 @@ const markAsDelivered = async (req, res) => {
 
 const getUserOrderStats = async (req, res) => {
   const { userid } = req.params;
+  console.log(userid);
+
   try {
     const [totalOrdersResult] = await sequelize.query(
       `
